@@ -1,26 +1,30 @@
 import * as config from './config';
 import Request from './request';
 import AwsGroupService from './services/aws_group';
+import AwsGroupRollService from './services/aws_group_roll';
 import AwsInstanceService from './services/aws_instance';
 import AwsSpotService from './services/aws_spot';
 import SubscriptionService from './services/subscription';
-import FunctionsService from './services/functions';
 import SpectrumService from './services/spectrum';
+import FunctionsService from './services/functions';
+import EndpointService from './services/endpoints';
 import debug from 'debug';
 
 export default class Client {
   constructor(...opts) {
-    this._debug  = debug(`${config.SDKName}:client`);
+    this._debug = debug(`${config.SDKName}:client`);
     this._config = this._defaultConfig();
     for (let opt of opts) {
       opt.call(this, this._config);
     }
-    this.AwsGroupService     = new AwsGroupService(this);
-    this.AwsInstanceService  = new AwsInstanceService(this);
-    this.AwsSpotService      = new AwsSpotService(this);
+    this.AwsGroupService = new AwsGroupService(this);
+    this.AwsGroupRollService = new AwsGroupRollService(this);
+    this.AwsInstanceService = new AwsInstanceService(this);
+    this.AwsSpotService = new AwsSpotService(this);
     this.SubscriptionService = new SubscriptionService(this);
-    this.FunctionsService    = new FunctionsService(this);
-	this.SpectrumService   	 = new SpectrumService(this);
+    this.FunctionsService = new FunctionsService(this);
+    this.SpectrumService = new SpectrumService(this);
+    this.EndpointService = new EndpointService(this);
   }
 
   /**
@@ -30,13 +34,13 @@ export default class Client {
    */
   _defaultConfig() {
     return {
-      apiAddress:   config.DefaultAPIAddress,
+      apiAddress: config.DefaultAPIAddress,
       oauthAddress: config.DefaultOAuthAddress,
-      scheme:       config.DefaultScheme,
-      userAgent:    config.DefaultUserAgent,
-      contentType:  config.DefaultContentType,
-      httpClient:   config.DefaultHttpClient,
-      httpTimeout:  config.DefaultHttpTimeout,
+      scheme: config.DefaultScheme,
+      userAgent: config.DefaultUserAgent,
+      contentType: config.DefaultContentType,
+      httpClient: config.DefaultHttpClient,
+      httpTimeout: config.DefaultHttpTimeout,
     };
   }
 
@@ -60,7 +64,7 @@ export default class Client {
 
     var options = {
       config: this._config,
-      url:    `${this._config.scheme}://${this._config.apiAddress}${path}`,
+      url: `${this._config.scheme}://${this._config.apiAddress}${path}`,
       method,
       body,
       params,
