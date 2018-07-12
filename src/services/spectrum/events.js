@@ -14,7 +14,7 @@ export default class SpectrumEventsService {
    * @param params
    * @returns {Promise}
    */
-  read(params = {}, callback) {
+  read(params = {}, callback) { // todo: read is list in API docs
     return new Promise((resolve, reject) => {
       this._debug('initiating a new read request, id=', params.resourceId);
 
@@ -39,7 +39,7 @@ export default class SpectrumEventsService {
    * @returns {Promise}
    */
   list(params = {}, callback) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => { // todo: list is list all in API docs
       this._debug('initiating a new readAll request');
 
       const url = `${this._basePath}?accountId=${params.accountId}`;
@@ -131,3 +131,5 @@ export default class SpectrumEventsService {
     });
   }
 }
+
+
