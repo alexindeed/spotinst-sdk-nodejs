@@ -8,6 +8,6 @@ export default class SpectrumService {
     this.Actions = new ActionsService(client);
     this.Alerts = new AlertsService(client);
     this.Events = new EventsService(client);
-    this.MetricsService = new MetricsService(cleint);
+    this.MetricsService = new MetricsService(client);
   }
 }

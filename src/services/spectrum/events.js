@@ -89,7 +89,7 @@ export default class SpectrumEventsService {
    */
   update(params = {}, callback) {
     return new Promise((resolve, reject) => {
-      this._debug('initiating a new update request, id=', params.id);
+      this._debug('initiating a new update job request, id=', params.id);
       this._debug('preparing body');
       const body = {job: Object.assign({}, params)};
       delete body.job.id;
