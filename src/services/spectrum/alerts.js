@@ -2,6 +2,9 @@ import {SDKName} from '../../config';
 import util from '../../util';
 import debug from 'debug';
 
+// todo: compile before testing
+// why is the lib dir checked in?
+
 export default class SpectrumAlertsService {
   constructor(client) {
     this._debug = debug(`${SDKName}:spectrum:alerts`);

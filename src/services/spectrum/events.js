@@ -115,7 +115,10 @@ export default class SpectrumEventsService {
    */
   delete(params = {}, callback) {
     return new Promise((resolve, reject) => {
-      if (!util.isValid('id', params.id, callback, reject)) return;
+      if (!util.isValid('id', params.id, callback, reject)) {
+        return;
+      }
+      
       this._debug('initiating a new delete request, id=', params.id);
       const req = this._client._newRequest('DELETE', `${this._basePath}/${params.id}?accountId=${params.accountId}`);
       this._debug('making delete request');
