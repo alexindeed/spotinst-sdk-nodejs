@@ -21,3 +21,9 @@ When working on code in this repository, tests can be run via:
 ```sh
 npm run test
 ```
+
+## Compiling to ES5:
+```
+./node_modules/.bin/babel ./src -d ./lib
+```
+git add 
