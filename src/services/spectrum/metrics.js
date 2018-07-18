@@ -9,10 +9,9 @@ export default class SpectrumMetricsService {
     this._basePath = '/spectrum/metrics';
   }
   
-  // todo: test Spectrum: query
   /**
    * query for specific metric statistics
-   * @param params todo: should I list out the params here?
+   * @param params todo: should we list out the params here?
    * @returns {Promise}
    */
   query(params = {}, callback) {
@@ -20,7 +19,7 @@ export default class SpectrumMetricsService {
       this._debug('initiating a new query request, params=', params);
       
       this._debug('preparing body');
-      const body = params; // todo: check body param assignment
+      const body = params;
       this._debug('body=', body);
       
       const url = `${this._basePath}/metricStatisticsQuery?accountId=${params.accountId}`;
@@ -39,7 +38,6 @@ export default class SpectrumMetricsService {
     });
   }
   
-  // todo: test Spectrum: report
   /**
    * publishes metric data points to Spotinst Spectrum
    * @param params
@@ -48,19 +46,21 @@ export default class SpectrumMetricsService {
   report(params = {}, callback) {
     return new Promise((resolve, reject) => {
       this._debug('initiating a new report request, params=', params);
+      const url = `${this._basePath}/metricData?accountId=${params.accountId}`;
+      
+      delete params.accountId;
   
       this._debug('preparing body');
-      const body = {metricData: Object.assign({}, params)};
+      const body = {metricData: [params]};
       this._debug('body=', body);
-  
-      const url = `${this._basePath}/metricData?accountId=${params.accountId}`;
+      
       const req = this._client._newRequest('POST', url, body);
   
       this._debug('making report request');
       this._client._requireOK(this._client._doRequest(req))
         .then((res) => {
           this._debug('promise resolved');
-          util.resolveOnSuccess(res.response.items[0], callback, resolve);
+          util.resolveOnSuccess(res.response, callback, resolve);
         })
         .catch((err) => {
           this._debug('promise rejected', err);
@@ -69,7 +69,6 @@ export default class SpectrumMetricsService {
     });
   }
   
-  // todo: test Spectrum: metric metadata
   /**
    * get metric metadata by filters.
    * @param params
@@ -80,7 +79,7 @@ export default class SpectrumMetricsService {
       this._debug('initiating a new metricMetadata request, params=', params);
   
       const url = `${this._basePath}/metricMetadata?namespace=${params.namespace}&dimension=${params.dimension}&metric=${params.metric}&accountId=${params.accountId}`;
-      const req = this._client._newRequest('GET', url, body);
+      const req = this._client._newRequest('GET', url);
       
       this._debug('making metricMetadata request');
       this._client._requireOK(this._client._doRequest(req))
