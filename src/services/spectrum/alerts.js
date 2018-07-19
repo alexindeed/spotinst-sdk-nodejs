@@ -2,8 +2,6 @@ import {SDKName} from '../../config';
 import util from '../../util';
 import debug from 'debug';
 
-// todo: compile before testing
-// why is the lib dir checked in?
 
 export default class SpectrumAlertsService {
   constructor(client) {
@@ -12,7 +10,6 @@ export default class SpectrumAlertsService {
     this._basePath = '/spectrum/metrics/alert';
   }
   
-  // todo: test alerts: list
   /**
    * describe a single alert.
    * @param params
@@ -38,7 +35,6 @@ export default class SpectrumAlertsService {
     });
   }
   
-  // todo: test alerts: list all
   /**
    * describe all alerts.
    * @param params
@@ -64,7 +60,6 @@ export default class SpectrumAlertsService {
     });
   }
   
-  // todo: test alerts: create
   /**
    * create an alert.
    * @param params
@@ -75,7 +70,7 @@ export default class SpectrumAlertsService {
       this._debug('initiating a new create alert request, params=', params);
       
       this._debug('preparing body');
-      const body = {job: Object.assign({}, params)};
+      const body = {alert: Object.assign({}, params)};
       this._debug('body=', body);
       
       const url = `${this._basePath}?accountId=${params.accountId}`;
@@ -94,19 +89,19 @@ export default class SpectrumAlertsService {
     });
   }
   
-  // todo: test alerts: update
   /**
    * update an existing alert.
    * @param params
    * @returns {Promise}
    */
+  // todo: check for correct alertId
   update(params = {}, callback) {
     return new Promise((resolve,reject)=> {
       this._debug('initiating a new update alert request, id=', params.alertId);
       
       this._debug('preparing body');
-      const body = {job: Object.assign({}, params)};
-      delete body.job.id;
+      const body = {alert: Object.assign({}, params)};
+      delete body.alert.accountId;
       this._debug('body=', body);
       
       const url = `${this._basePath}/${params.alertId}?accountId=${params.accountId}`;
@@ -116,7 +111,7 @@ export default class SpectrumAlertsService {
       this._client._requireOK(this._client._doRequest(req))
         .then((res) => {
           this._debug('promise resolved');
-          util.resolveOnSuccess(res.response.items, callback, resolve);
+          util.resolveOnSuccess(res.response, callback, resolve);
         })
         .catch((err) => {
           this._debug('promise rejected', err);
@@ -125,7 +120,6 @@ export default class SpectrumAlertsService {
     });
   }
   
-  // todo: test alerts: delete
   /**
    * delete an existing alert.
    * @param params
@@ -133,8 +127,11 @@ export default class SpectrumAlertsService {
    */
   delete(params = {}, callback) {
     return new Promise((resolve,reject)=> {
-      if (!util.isValid('id', params.alertId, callback, reject)) return;
-      this._debug('initiating a new delete request, id=', params.alertId);
+      if (!util.isValid('id', params.id, callback, reject)) {
+        return;
+      }
+      
+      this._debug('initiating a new delete request, id=', params.id);
       
       const url = `${this._basePath}/${params.id}?accountId=${params.accountId}`;
       const req = this._client._newRequest('DELETE', url);
@@ -143,7 +140,7 @@ export default class SpectrumAlertsService {
       this._client._requireOK(this._client._doRequest(req))
         .then((res) => {
           this._debug('promise resolved');
-          util.resolveOnSuccess(res.response.items, callback, resolve);
+          util.resolveOnSuccess(res.response, callback, resolve);
         })
         .catch((err) => {
           this._debug('promise rejected', err);
