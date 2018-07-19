@@ -26,4 +26,4 @@ npm run test
 ```
 ./node_modules/.bin/babel ./src -d ./lib
 ```
-git add 
+git add
